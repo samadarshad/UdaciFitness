@@ -34,7 +34,7 @@ function SubmitBtn({ onPress }) {
 class AddEntry extends Component {
     state = {
         run: 0,
-        bike: 10,
+        bike: 0,
         swim: 0,
         sleep: 0,
         eat: 0,
@@ -72,7 +72,7 @@ class AddEntry extends Component {
 
     submit = () => {
         const key = timeToString()
-        const entry = this.state
+        const entry = [this.state]
 
         this.props.dispatch(addEntry({
             [key]: entry
@@ -118,8 +118,6 @@ class AddEntry extends Component {
         }
         return (
             <View style={styles.container}>
-                <DateHeader date={(new Date()).toLocaleDateString()} />
-                <Text>{JSON.stringify(this.state)}</Text>
                 {Object.keys(metaInfo).map((key) => {
                     const { getIcon, type, ...rest } = metaInfo[key]
                     const value = this.state[key]
@@ -194,9 +192,9 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     const key = timeToString()
-
+    debugger
     return {
-        alreadyLogged: state[key] && typeof state[key].today === 'undefined'
+        alreadyLogged: state[key] && state[key][0] && typeof state[key][0].today === 'undefined'
     }
 }
 

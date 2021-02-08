@@ -157,7 +157,11 @@ export function getMetricMetaInfo(metric) {
 }
 
 export function getDailyReminderValue() {
-    return {
+    return [{
         today: "👋 Don't forget to log your data today!"
-    }
+    }]
+}
+
+export function isEmpty(obj) {
+    return obj && Object.keys(obj).length === 0 && obj.constructor === Object
 }
