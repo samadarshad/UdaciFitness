@@ -13,6 +13,9 @@ import reducer from './reducers'
 import { purple, white } from './utils/colors'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import Constants from 'expo-constants'
+import EntryDetail from './components/EntryDetail'
+import { createStackNavigator } from '@react-navigation/stack'
+
 
 function UdaciStatusBar({ backgroundColor, ...props }) {
   return (
@@ -20,8 +23,9 @@ function UdaciStatusBar({ backgroundColor, ...props }) {
       <StatusBar translucent backgroundColor={backgroundColor} {...props} />
     </View>
   )
-
 }
+
+// Config for TabNav
 const RouteConfigs = {
   History: {
     name: "History",
@@ -59,19 +63,55 @@ const Tab = Platform.OS === 'ios'
   ? createBottomTabNavigator()
   : createMaterialTopTabNavigator()
 
+const TabNav = () => (
+  <Tab.Navigator {...TabNavigatorConfig}>
+    <Tab.Screen {...RouteConfigs['History']} />
+    <Tab.Screen {...RouteConfigs['AddEntry']} />
+  </Tab.Navigator>
+)
 
+// Config for StackNav
+const StackNavigatorConfig = {
+  headerMode: "screen"
+}
+const StackConfig = {
+  TabNav: {
+    name: "Home",
+    component: TabNav,
+    options: { headerShown: false }
+  },
+  EntryDetail: {
+    name: "EntryDetail",
+    component: EntryDetail,
+    options: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple
+      },
+      title: "Entry Detail"
+    }
+  }
+}
+const Stack = createStackNavigator();
+const MainNav = () => (
+  <Stack.Navigator {...StackNavigatorConfig}>
+    <Stack.Screen {...StackConfig['TabNav']} />
+    <Stack.Screen {...StackConfig['EntryDetail']} />
+  </Stack.Navigator>
+)
+
+// App 
 export default class App extends React.Component {
   render() {
     const store = createStore(reducer)
     return (
       <Provider store={store}>
-        <NavigationContainer>
+        <View style={{ flex: 1 }}>
           <UdaciStatusBar backgroundColor={purple} barStyle='light-content' />
-          <Tab.Navigator {...TabNavigatorConfig}>
-            <Tab.Screen {...RouteConfigs['History']} />
-            <Tab.Screen {...RouteConfigs['AddEntry']} />
-          </Tab.Navigator>
-        </NavigationContainer>
+          <NavigationContainer >
+            <MainNav />
+          </NavigationContainer>
+        </View>
       </Provider>
     )
   }
