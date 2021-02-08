@@ -25,7 +25,8 @@ class History extends Component {
         <View>
             {today
                 ? <Text>{JSON.stringify(today)}</Text>
-                : <Text>{JSON.stringify(metrics)}</Text>}
+                : <Text>{JSON.stringify(metrics)}</Text>
+            }
         </View>
     )
 
