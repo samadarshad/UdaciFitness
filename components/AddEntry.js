@@ -19,6 +19,7 @@ import { submitEntry, removeEntry } from '../utils/api'
 import { connect } from 'react-redux'
 import { addEntry } from '../actions'
 import { white, purple } from '../utils/colors';
+import { CommonActions } from '@react-navigation/native';
 
 function SubmitBtn({ onPress }) {
     return (
@@ -86,6 +87,9 @@ class AddEntry extends Component {
             eat: 0,
         }))
 
+
+        this.toHome()
+
         submitEntry({ key, entry })
         // update redux, nav home, save to db, clear local notification 
     }
@@ -96,8 +100,18 @@ class AddEntry extends Component {
         this.props.dispatch(addEntry({
             [key]: getDailyReminderValue()
         }))
+
+        this.toHome()
+
         removeEntry(key)
-        //update redux, go home, update database
+
+    }
+
+    toHome = () => {
+        this.props.navigation.dispatch(
+            CommonActions.goBack({
+                key: 'AddEntry',
+            }))
     }
     render() {
         const metaInfo = getMetricMetaInfo()
